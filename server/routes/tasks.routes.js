@@ -41,5 +41,36 @@ router.get('/:taskId', (req, res) => {
 });
 
 
+router.put('/:taskId', (req, res, next) => {
+    const { taskId } = req.params;
+    const { title, description, project } = req.body
+   
+  // This very simple check is useful for the lesson, it may become more cmplex in extended applications
+    // Normally you would let mongoose do this in the validation step
+    if (!mongoose.Types.ObjectId.isValid(taskId)) {
+      res.status(400).json({ message: 'Specified id is not valid' });
+      return;
+    }
+   
+    Task.findByIdAndUpdate(taskId, { title, description, project }, {new: true})
+      .then((newTask) => res.json(newTask))
+      .catch(error => res.json(error));
+});
+
+
+
+router.delete('/:taskId', (req, res) => {
+    const { taskId } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(taskId)) {
+      res.status(400).json({ message: 'Specified id is not valid' });
+      return;
+    }
+   
+    Task.findByIdAndRemove(taskId)
+      .then(() => res.json({ message: `Task with ${taskId} is removed successfully.` }))
+      .catch(error => res.json(error));
+});
+   
+
 module.exports = router
 // the same as 'export default' that we have used in frontend code

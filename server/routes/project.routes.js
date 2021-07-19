@@ -41,8 +41,9 @@ router.get('/:projectId', (req, res) => {
 });
 
 
-router.put('/:projectId', (req, res) => {
+router.put('/:projectId', (req, res, next) => {
     const { projectId } = req.params;
+    const { title, description, tasks } = req.body
    
   // This very simple check is useful for the lesson, it may become more cmplex in extended applications
     // Normally you would let mongoose do this in the validation step
@@ -51,11 +52,25 @@ router.put('/:projectId', (req, res) => {
       return;
     }
    
-    Project.findByIdAndUpdate(projectId, req.body)
-      .populate('tasks')
-      .then(() => res.json({ message: `Project with ${projectId} is updated successfully.` }))
+    Project.findByIdAndUpdate(projectId, { title, description, tasks }, {new: true})
+      .then((newProject) => res.json(newProject))
       .catch(error => res.json(error));
 });
+
+
+router.delete('/:projectId', (req, res) => {
+    const { projectId } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(projectId)) {
+      res.status(400).json({ message: 'Specified id is not valid' });
+      return;
+    }
+   
+    Project.findByIdAndRemove(projectId)
+      .then(() => res.json({ message: `Project with ${projectId} is removed successfully.` }))
+      .catch(error => res.json(error));
+});
+   
+
 
 
  
