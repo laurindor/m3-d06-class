@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 const Project = require('../models/Project.model')
 
 router.post('/', (req, res)=>{
-    const {  title, description } = req.body
+    const { title, description } = req.body
 
     Project.create({
         title,
@@ -25,7 +25,6 @@ router.get('/', (req, res)=>{
     .catch(err=>res.json(err))
 })
 
-
 router.get('/:projectId', (req, res) => {
     const { projectId } = req.params;
    
@@ -41,23 +40,5 @@ router.get('/:projectId', (req, res) => {
 });
 
 
-router.put('/:projectId', (req, res) => {
-    const { projectId } = req.params;
-   
-  // This very simple check is useful for the lesson, it may become more cmplex in extended applications
-    // Normally you would let mongoose do this in the validation step
-    if (!mongoose.Types.ObjectId.isValid(projectId)) {
-      res.status(400).json({ message: 'Specified id is not valid' });
-      return;
-    }
-   
-    Project.findByIdAndUpdate(projectId, req.body)
-      .populate('tasks')
-      .then(() => res.json({ message: `Project with ${projectId} is updated successfully.` }))
-      .catch(error => res.json(error));
-});
-
-
- 
 module.exports = router
-// the same as 'export default' that we have used in frontend code
+// the same as 'export defualt' that we have used in frontend code
