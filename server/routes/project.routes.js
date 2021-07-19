@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 const Project = require('../models/Project.model')
 
 router.post('/', (req, res)=>{
-    const {  title, description } = req.body
+    const { title, description } = req.body
 
     Project.create({
         title,
