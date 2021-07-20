@@ -5,21 +5,18 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const saltRounds = process.env.SALT || 10;
 
-const User = require('../models/User.model');
+const User = require('./../models/User.model');
+const isNotLoggedIn = require('./../middleware/isNotLoggedIn')
 
-const isNotLoggedIn = require('../middleware/isNotLoggedIn');
-const { json } = require('express');
-
-router.post('/signup',  (req, res) => {
-	const { username, email, password } = req.body;
-
+router.post('/signup', (req, res)=>{
+	const {username, email, password} = req.body
 	if(!username || !password || !email) res.status(400).json({message: 'You provided incorrect signup values'})
+	console.log(req.body)
 
-	//Check if user already exists
 	User.findOne({username})
 	.then(user=> {
 		if(user) {
-			res.status(400).json({message: 'The username already exists'})
+			res.status(402).json({message: 'The username already exists'})
 		} else {
 			//Hash the password
 			const salt = bcrypt.genSaltSync(saltRounds);
@@ -32,7 +29,7 @@ router.post('/signup',  (req, res) => {
 	})
 })
 
-router.post('/login', isNotLoggedIn (req, res)=>{
+router.post('/login', (req, res)=>{
 	const {username, password} = req.body
 
 	User.findOne({username})
@@ -44,7 +41,8 @@ router.post('/login', isNotLoggedIn (req, res)=>{
 			const passwordCorrect = bcrypt.compareSync(password, encryptedPassword);
 
 			if(passwordCorrect){
-				res.json({message: 'User correctly logged in'}) // Express will close the response automatically with a 200 status code
+				req.session.currentUser = user
+				res.json(user) // Express will close the response automatically with a 200 status code
 			} else {
 				res.status(400).res.json({message: 'The credentials are invalid'})
 			}
@@ -53,7 +51,7 @@ router.post('/login', isNotLoggedIn (req, res)=>{
 	.catch(err=>res.json(err)) //Express will automatically set a 400 erorr status code in .cathc
 })
 
-router.get('/logout', isNotLoggedIn (req, res) => {
+router.get('/logout', (req, res) => {
 	req.session.destroy((err) => {
 		if (err) {
 			res.status(400).json({ message: 'Something went wrong! Yikes!' });
@@ -63,5 +61,4 @@ router.get('/logout', isNotLoggedIn (req, res) => {
 	});
 })
 
-
-module.exports = router
+module.exports = router;
