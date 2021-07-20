@@ -21,7 +21,7 @@ function Signup(){
         event.preventDefault();
         const {username, email, password} = formState;
        
-        Signup(username, email, password)
+        auth.signup(username, email, password)
         .then(createdUser => {
             console.log(createdUser)
             setFormState(initialFormState);
@@ -29,48 +29,42 @@ function Signup(){
         .catch(error => console.log(error))
       }
 
-
     return(
-        <div>
+      <div>
         <form onSubmit={handleFormSubmit}>
           <label>
-          Username:
-            <input
-              type="text"
-              name="username"
-              value={formState.username}
-              onChange={handleChange}
-            />
+            Username:
+              <input
+                type="text"
+                name="username"
+                value={formState.username}
+                onChange={handleChange}
+              />
           </label>
-
-        <label>
-          Email:
-            <input
-              type="email"
-              name="email"
-              value={formState.email}
-              onChange={handleChange}
-            />
-        </label>
-          
-        <label>
-          Password:
-            <input
-              type="password"
-              name="password"
-              value={formState.password}
-              onChange={handleChange}
-            />
+          <label>
+            Email:
+              <input
+                type="email"
+                name="email"
+                value={formState.email}
+                onChange={handleChange}
+              />
           </label>
-   
+          <label>
+            Password:
+              <input
+                type="password"
+                name="password"
+                value={formState.password}
+                onChange={handleChange}
+              />
+          </label>
           <button type="submit"> Signup </button>
         </form>
-   
         <p>
           Already have an account?
           <Link to={"/"}> Login</Link>
         </p>
-   
       </div>
     )
 }
