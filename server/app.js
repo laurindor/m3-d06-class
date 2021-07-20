@@ -28,7 +28,7 @@ app.locals.title = `${capitalized(projectName)} created with Ironlauncher`;
 // 👇 Start handling routes here
 const isLoggedIn = require('./middleware/isLoggedIn');
 
-const authRoutes = require('./routes/auth-routes');
+const authRoutes = require('./routes/auth.routes');
 app.use('/auth', authRoutes);
 
 const projectRouter = require('./routes/project.routes')

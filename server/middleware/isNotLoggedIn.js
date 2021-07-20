@@ -1,9 +1,9 @@
 function isNotLoggedIn(req, res, next) {
 	if (req.session.currentUser) {
-		res.redirect('/private/profile');
-	} else {
+	
 		next();
-	}
+	}	 else {	
+		res.json(message'you are locked out')
 }
 
-module.exports = isNotLoggedIn;
+module.exports = isNotLoggedIn

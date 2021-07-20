@@ -5,9 +5,9 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const saltRounds = process.env.SALT || 10;
 
-const User = require('./../models/User.model');
+const User = require('../models/User.model');
 
-const isNotLoggedIn = require('./../middleware/isNotLoggedIn');
+const isNotLoggedIn = require('../middleware/isNotLoggedIn');
 const { json } = require('express');
 
 router.post('/signup',  (req, res) => {
@@ -32,7 +32,7 @@ router.post('/signup',  (req, res) => {
 	})
 })
 
-router.post('/login', (req, res)=>{
+router.post('/login', isNotLoggedIn (req, res)=>{
 	const {username, password} = req.body
 
 	User.findOne({username})
@@ -53,7 +53,7 @@ router.post('/login', (req, res)=>{
 	.catch(err=>res.json(err)) //Express will automatically set a 400 erorr status code in .cathc
 })
 
-router.get('/logout', (req, res) => {
+router.get('/logout', isNotLoggedIn (req, res) => {
 	req.session.destroy((err) => {
 		if (err) {
 			res.status(400).json({ message: 'Something went wrong! Yikes!' });
@@ -61,7 +61,7 @@ router.get('/logout', (req, res) => {
 			res.json({message: 'User successfully logged out'});
 		}
 	});
-}
+})
 
 
-module.exports = router;
+module.exports = router
