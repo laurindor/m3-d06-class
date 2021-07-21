@@ -8,6 +8,8 @@ import ProjectDetails from './components/projects/ProjectDetails';
 import Navbar from './components/navbar/Navbar'
 import Signup from './components/auth/Signup'
 import Login from './components/auth/Login'
+import ProtectedRoute from './components/ProtectedRoute'
+import DisplayUserName from './components/DisplayUserName'
 
 function App() {
 
@@ -19,10 +21,16 @@ function App() {
       <BrowserRouter>
         <Navbar loggedInUser={loggedInUser}/>
         <Switch>
-          <Route exact path="/projects" component={ProjectList}/>
+          <ProtectedRoute
+            user={loggedInUser}
+            path={'/projects/protected'}
+             component={DisplayUserName}
+          />
           <Route exact path="/projects/:projectId" component={ProjectDetails} />
+          <Route exact path="/projects" component={ProjectList}/>
           <Route exact path="/signup" component={Signup} />
           <Route exact path="/login" render={props=> <Login {...props} setLoggedInUser={setLoggedInUser}/>} />
+
         </Switch>
       </BrowserRouter>
     </div>
