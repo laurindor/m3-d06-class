@@ -61,4 +61,13 @@ router.get('/logout', (req, res) => {
 	});
 })
 
+router.get('/isloggedin', (req, res) => {
+	const loggedInUser = req.session.currentUser 
+		if (loggedInUser) {
+			res.json(loggedInUser);
+		} else {
+			res.status(403).json({ message: 'Unauthorised!' });
+		}
+});
+
 module.exports = router;

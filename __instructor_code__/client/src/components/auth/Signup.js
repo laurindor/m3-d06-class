@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import * as auth from './auth-service'
+import * as auth from '../../services/auth-service'
 import { Link } from 'react-router-dom';
 
 function Signup(){
