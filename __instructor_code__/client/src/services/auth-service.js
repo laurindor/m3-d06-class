@@ -21,6 +21,11 @@ function logout(){
     .then(res=>res.data)
 }
 
+
+function isLoggedIn(){
+    return authService.get('/isloggedin')
+    .then(res=>res.data)
+}
 export { authService, signup, login, logout}
 
 // This form will allow me to import the services into my App with the following "namespace" syntax:
